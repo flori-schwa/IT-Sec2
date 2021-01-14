@@ -1,16 +1,8 @@
 # name of your application
-APPLICATION = aes_ecb_example
+APPLICATION = example_aes_cbc_cmd
 
 # If no BOARD is found in the environment, use this default:
 BOARD ?= native
-
-USEMODULE += shell
-USEMODULE += shell_commands
-USEMODULE += saul_default
-USEMODULE += crypto_aes  
-USEMODULE += od
-USEMODULE += cipher_modes
-USEMODULE += random
 
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= ${CURDIR}/../.base
@@ -19,6 +11,14 @@ RIOTBASE ?= ${CURDIR}/../.base
 # which is not needed in a production environment but helps in the
 # development process:
 DEVELHELP ?= 1
+
+USEMODULE += shell			# RIOT Shell Modul
+USEMODULE += shell_commands # RIOT Shell Commands
+USEMODULE += crypto_aes		# Verschlüsselung mithilfe von AES
+USEMODULE += od				# Object Dump
+USEMODULE += od_string		# Object Dump String representation
+USEMODULE += cipher_modes	# Um AES-CBC zu verwenden
+USEMODULE += random			# Um einen zufälligen IV zu generieren
 
 # Change this to 0 show compiler invocation lines by default:
 QUIET ?= 1

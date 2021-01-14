@@ -33,9 +33,10 @@ cipher_t *get_cipher(void)
     return &cipher;
 }
 
-uint8_t* decrypt(uint8_t *buffer, size_t size)
+uint8_t *decrypt(uint8_t *buffer, size_t size)
 {
-    if (!buffer || size <= 0 || size % AES_BLOCK_SIZE) {
+    if (!buffer || size <= 0 || size % AES_BLOCK_SIZE)
+    {
         return NULL; // Eingabevalidierung
     }
 
@@ -43,18 +44,20 @@ uint8_t* decrypt(uint8_t *buffer, size_t size)
     size_t amount_blocks = size / AES_BLOCK_SIZE;
 
     // Alloziere Speicher für die Ausgabe
-    uint8_t* output = malloc(size);
+    uint8_t *output = malloc(size);
 
     // Verschlüsseln
 
-    cipher_t* cipher = get_cipher();
+    cipher_t *cipher = get_cipher();
     int err;
 
-    for (size_t block = 0; block < amount_blocks; block++) {
+    for (size_t block = 0; block < amount_blocks; block++)
+    {
         size_t offset = block * AES_BLOCK_SIZE;
         err = cipher_decrypt(cipher, buffer + offset, output + offset);
 
-        if (err != 1) {
+        if (err != 1)
+        {
             printf("Failed to decrypt data: %d\n", err);
             exit(err);
         }
@@ -63,9 +66,10 @@ uint8_t* decrypt(uint8_t *buffer, size_t size)
     return output;
 }
 
-uint8_t* encrypt(char *buffer, size_t* size_out)
+uint8_t *encrypt(char *buffer, size_t *size_out)
 {
-    if (!buffer || !size_out) {
+    if (!buffer || !size_out)
+    {
         return NULL; // Eingabevalidierung
     }
 
@@ -83,22 +87,24 @@ uint8_t* encrypt(char *buffer, size_t* size_out)
     *size_out = sizeof(uint8_t) * (amount_blocks * AES_BLOCK_SIZE);
 
     // Eingabe padden
-    uint8_t* input = calloc((amount_blocks * AES_BLOCK_SIZE), sizeof(uint8_t)); // calloc initialisiert den Speicher zusätzlich mit Nullen
-    sprintf((char*) input, "%s", buffer);
+    uint8_t *input = calloc((amount_blocks * AES_BLOCK_SIZE), sizeof(uint8_t)); // calloc initialisiert den Speicher zusätzlich mit Nullen
+    sprintf((char *)input, "%s", buffer);
 
     // Alloziere Speicher für die Ausgabe
-    uint8_t* output = malloc(*size_out);
+    uint8_t *output = malloc(*size_out);
 
     // Verschlüsseln
 
-    cipher_t* cipher = get_cipher();
+    cipher_t *cipher = get_cipher();
     int err;
 
-    for (size_t block = 0; block < amount_blocks; block++) {
+    for (size_t block = 0; block < amount_blocks; block++)
+    {
         size_t offset = block * AES_BLOCK_SIZE;
         err = cipher_encrypt(cipher, input + offset, output + offset);
 
-        if (err != 1) {
+        if (err != 1)
+        {
             printf("Failed to encrypt data: %d\n", err);
             exit(err);
         }
@@ -110,11 +116,11 @@ uint8_t* encrypt(char *buffer, size_t* size_out)
 
 int main(void)
 {
-    char* message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+    char *message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 
     size_t size;
-    uint8_t* encrypted = encrypt(message, &size);
-    uint8_t* decrypted = decrypt(encrypted, size);
+    uint8_t *encrypted = encrypt(message, &size);
+    uint8_t *decrypted = decrypt(encrypted, size);
 
     od_hex_dump_ext(message, strlen(message) + 1, AES_BLOCK_SIZE, 0);
     printf("\n");

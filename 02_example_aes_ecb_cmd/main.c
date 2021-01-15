@@ -41,19 +41,17 @@ uint8_t *decrypt(uint8_t *buffer, size_t size)
     return output;
 }
 
-uint8_t *encrypt(char *buffer, size_t *size_out)
+uint8_t *encrypt(void *buffer, size_t size, size_t *size_out)
 {
     if (!buffer || !size_out)
     {
         return NULL; // Eingabevalidierung
     }
 
-    // Berechne die Länge die Ausgabe
+    // Berechne die Menge an Blöcken
+    size_t amount_blocks = size / AES_BLOCK_SIZE;
 
-    size_t string_len = strlen(buffer) + 1; // + 1 für 0 Byte
-    size_t amount_blocks = string_len / AES_BLOCK_SIZE;
-
-    if (string_len % AES_BLOCK_SIZE)
+    if (size % AES_BLOCK_SIZE)
     {
         ++amount_blocks;
     }
@@ -63,7 +61,7 @@ uint8_t *encrypt(char *buffer, size_t *size_out)
 
     // Eingabe padden
     uint8_t *input = calloc((amount_blocks * AES_BLOCK_SIZE), sizeof(uint8_t)); // calloc initialisiert den Speicher zusätzlich mit Nullen
-    sprintf((char *)input, "%s", buffer);
+    memcpy((void*) input, buffer, size);
 
     // Alloziere Speicher für die Ausgabe
     uint8_t *output = malloc(*size_out);
@@ -87,6 +85,10 @@ uint8_t *encrypt(char *buffer, size_t *size_out)
     return output;
 }
 
+uint8_t* encrypt_string(char* string, size_t* size_out) {
+    return encrypt((void*) string, strlen(string) + 1, size_out);
+}
+
 int encrypt_command_handler(int argc, char **argv)
 {
     if (argc < 2)
@@ -96,7 +98,7 @@ int encrypt_command_handler(int argc, char **argv)
     }
 
     size_t size;
-    uint8_t *encrypted = encrypt(argv[1], &size);
+    uint8_t *encrypted = encrypt_string(argv[1], &size);
     uint8_t *decrypted = decrypt(encrypted, size);
 
     od_hex_dump_ext(argv[1], strlen(argv[1]) + 1, AES_BLOCK_SIZE, 0);

@@ -5,70 +5,37 @@
 #include "shell.h"
 #include "shell_commands.h"
 #include "od.h"
+#include "random.h"
+
+#include "crypto/modes/cbc.h"
 #include "crypto/ciphers.h"
 #include "crypto/aes.h"
 
-static uint8_t key[] = {
-    0x64, 0x52, 0x67, 0x55,
-    0x6B, 0x58, 0x70, 0x32,
-    0x73, 0x35, 0x75, 0x38,
-    0x78, 0x2F, 0x41, 0x3F};
+static cipher_t cipher;
 
-cipher_t *get_cipher(void)
-{
-    static cipher_t cipher;
-    static bool initialized = false;
-
-    if (!initialized)
-    {
-        int err = cipher_init(&cipher, CIPHER_AES_128, key, AES_KEY_SIZE);
-
-        if (err != CIPHER_INIT_SUCCESS)
-        {
-            printf("Failed to init cipher: %d\n", err);
-            exit(err);
-        }
-
-        initialized = true;
-    }
-
-    return &cipher;
-}
-
-uint8_t *decrypt(uint8_t *buffer, size_t size)
+uint8_t *decrypt(uint8_t *buffer, uint8_t iv[16], size_t size)
 {
     if (!buffer || size <= 0 || size % AES_BLOCK_SIZE)
     {
         return NULL; // Eingabevalidierung
     }
 
-    // Berechne die Menge an Blöcken
-    size_t amount_blocks = size / AES_BLOCK_SIZE;
-
     // Alloziere Speicher für die Ausgabe
     uint8_t *output = malloc(size);
 
     // Verschlüsseln
+    int err = cipher_decrypt_cbc(&cipher, iv, buffer, size, output);
 
-    cipher_t *cipher = get_cipher();
-    int err;
-
-    for (size_t block = 0; block < amount_blocks; block++)
+    if (err < 0)
     {
-        size_t offset = block * AES_BLOCK_SIZE;
-        err = cipher_decrypt(cipher, buffer + offset, output + offset);
-
-        if (err != 1)
-        {
-            printf("Failed to decrypt data: %d\n", err);
-            exit(err);
-        }
+        printf("Failed to decrypt data: %d\n", err);
+        exit(err);
     }
 
     return output;
 }
 
-uint8_t *encrypt(char *buffer, size_t *size_out)
+uint8_t *encrypt(char *buffer, uint8_t iv[16], size_t *size_out)
 {
     if (!buffer || !size_out)
     {
@@ -95,21 +62,16 @@ uint8_t *encrypt(char *buffer, size_t *size_out)
     // Alloziere Speicher für die Ausgabe
     uint8_t *output = malloc(*size_out);
 
+    // IV generieren
+    random_bytes(iv, 16); // In Produktionsumgebungen eine Kryptographisch sichere Random Funktion verwenden!!!
+
     // Verschlüsseln
+    int err = cipher_encrypt_cbc(&cipher, iv, input, *size_out, output);
 
-    cipher_t *cipher = get_cipher();
-    int err;
-
-    for (size_t block = 0; block < amount_blocks; block++)
+    if (err < 0)
     {
-        size_t offset = block * AES_BLOCK_SIZE;
-        err = cipher_encrypt(cipher, input + offset, output + offset);
-
-        if (err != 1)
-        {
-            printf("Failed to encrypt data: %d\n", err);
-            exit(err);
-        }
+        printf("Failed to encrypt data: %d\n", err);
+        exit(err);
     }
 
     free(input);
@@ -125,8 +87,14 @@ int encrypt_command_handler(int argc, char **argv)
     }
 
     size_t size;
-    uint8_t *encrypted = encrypt(argv[1], &size);
-    uint8_t *decrypted = decrypt(encrypted, size);
+    uint8_t iv[16];
+
+    uint8_t *encrypted = encrypt(argv[1], iv, &size);
+    uint8_t *decrypted = decrypt(encrypted, iv, size);
+
+    printf("IV: ");
+    od_hex_dump_ext(iv, 16, 0, 0);
+    printf("\n");
 
     od_hex_dump_ext(argv[1], strlen(argv[1]) + 1, AES_BLOCK_SIZE, 0);
     printf("\n");
@@ -142,6 +110,20 @@ int encrypt_command_handler(int argc, char **argv)
 
 int main(void)
 {
+    uint8_t key[] = {
+        0x64, 0x52, 0x67, 0x55,
+        0x6B, 0x58, 0x70, 0x32,
+        0x73, 0x35, 0x75, 0x38,
+        0x78, 0x2F, 0x41, 0x3F};
+
+    int err = cipher_init(&cipher, CIPHER_AES_128, key, AES_KEY_SIZE);
+
+    if (err != CIPHER_INIT_SUCCESS)
+    {
+        printf("Cipher Init failed: %d\n", err);
+        exit(err);
+    }
+
     shell_command_t commands[] = {
         {"encrypt", "encrypt a message", encrypt_command_handler},
         {NULL, NULL, NULL}};

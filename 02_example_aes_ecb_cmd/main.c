@@ -2,36 +2,13 @@
 #include <string.h>
 #include <stdbool.h>
 
+#include "shell.h"
+#include "shell_commands.h"
 #include "od.h"
 #include "crypto/ciphers.h"
 #include "crypto/aes.h"
 
-static uint8_t key[] = {
-    0x64, 0x52, 0x67, 0x55,
-    0x6B, 0x58, 0x70, 0x32,
-    0x73, 0x35, 0x75, 0x38,
-    0x78, 0x2F, 0x41, 0x3F};
-
-cipher_t *get_cipher(void)
-{
-    static cipher_t cipher;
-    static bool initialized = false;
-
-    if (!initialized)
-    {
-        int err = cipher_init(&cipher, CIPHER_AES_128, key, AES_KEY_SIZE);
-
-        if (err != CIPHER_INIT_SUCCESS)
-        {
-            printf("Failed to init cipher: %d\n", err);
-            exit(err);
-        }
-
-        initialized = true;
-    }
-
-    return &cipher;
-}
+static cipher_t cipher;
 
 uint8_t *decrypt(uint8_t *buffer, size_t size)
 {
@@ -47,14 +24,12 @@ uint8_t *decrypt(uint8_t *buffer, size_t size)
     uint8_t *output = malloc(size);
 
     // Verschlüsseln
-
-    cipher_t *cipher = get_cipher();
     int err;
 
     for (size_t block = 0; block < amount_blocks; block++)
     {
         size_t offset = block * AES_BLOCK_SIZE;
-        err = cipher_decrypt(cipher, buffer + offset, output + offset);
+        err = cipher_decrypt(&cipher, buffer + offset, output + offset);
 
         if (err != 1)
         {
@@ -94,14 +69,12 @@ uint8_t *encrypt(char *buffer, size_t *size_out)
     uint8_t *output = malloc(*size_out);
 
     // Verschlüsseln
-
-    cipher_t *cipher = get_cipher();
     int err;
 
     for (size_t block = 0; block < amount_blocks; block++)
     {
         size_t offset = block * AES_BLOCK_SIZE;
-        err = cipher_encrypt(cipher, input + offset, output + offset);
+        err = cipher_encrypt(&cipher, input + offset, output + offset);
 
         if (err != 1)
         {
@@ -114,15 +87,19 @@ uint8_t *encrypt(char *buffer, size_t *size_out)
     return output;
 }
 
-int main(void)
+int encrypt_command_handler(int argc, char **argv)
 {
-    char *message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+    if (argc < 2)
+    {
+        printf("Syntax: %s <message>\n", argv[0]);
+        return 1;
+    }
 
     size_t size;
-    uint8_t *encrypted = encrypt(message, &size);
+    uint8_t *encrypted = encrypt(argv[1], &size);
     uint8_t *decrypted = decrypt(encrypted, size);
 
-    od_hex_dump_ext(message, strlen(message) + 1, AES_BLOCK_SIZE, 0);
+    od_hex_dump_ext(argv[1], strlen(argv[1]) + 1, AES_BLOCK_SIZE, 0);
     printf("\n");
     od_hex_dump_ext(encrypted, size, AES_BLOCK_SIZE, 0);
     printf("\n");
@@ -131,5 +108,31 @@ int main(void)
     free(encrypted);
     free(decrypted);
 
-    exit(0);
+    return 0;
+}
+
+int main(void)
+{
+    uint8_t key[] = {
+        0x64, 0x52, 0x67, 0x55,
+        0x6B, 0x58, 0x70, 0x32,
+        0x73, 0x35, 0x75, 0x38,
+        0x78, 0x2F, 0x41, 0x3F};
+
+    int err = cipher_init(&cipher, CIPHER_AES_128, key, AES_KEY_SIZE);
+
+    if (err != CIPHER_INIT_SUCCESS)
+    {
+        printf("Cipher Init failed: %d\n", err);
+        exit(err);
+    }
+
+    shell_command_t commands[] = {
+        {"encrypt", "encrypt a message", encrypt_command_handler},
+        {NULL, NULL, NULL}};
+
+    char line_buf[SHELL_DEFAULT_BUFSIZE];
+    shell_run(commands, line_buf, SHELL_DEFAULT_BUFSIZE);
+
+    return 0;
 }

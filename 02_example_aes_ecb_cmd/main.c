@@ -61,7 +61,7 @@ uint8_t *encrypt(void *buffer, size_t size, size_t *size_out)
 
     // Eingabe padden
     uint8_t *input = calloc((amount_blocks * AES_BLOCK_SIZE), sizeof(uint8_t)); // calloc initialisiert den Speicher zusätzlich mit Nullen
-    memcpy((void*) input, buffer, size);
+    memcpy((void *)input, buffer, size);
 
     // Alloziere Speicher für die Ausgabe
     uint8_t *output = malloc(*size_out);
@@ -85,8 +85,9 @@ uint8_t *encrypt(void *buffer, size_t size, size_t *size_out)
     return output;
 }
 
-uint8_t* encrypt_string(char* string, size_t* size_out) {
-    return encrypt((void*) string, strlen(string) + 1, size_out);
+uint8_t *encrypt_string(char *string, size_t *size_out)
+{
+    return encrypt((void *)string, strlen(string) + 1, size_out);
 }
 
 int encrypt_command_handler(int argc, char **argv)

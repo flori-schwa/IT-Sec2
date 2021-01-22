@@ -1,46 +1,34 @@
-Zu RIOT OS
-==========
+#Zu RIOT OS
 
 RIOT ist ein Echtzeitbetriebssystem zur Anwendung im Bereich IoT. Kryptographie ist in der IoT wichtig, da sensitive Informationen (wie z.B. ob jemand zuhause) unbedingt nur von berechtigten Personen einsehbar sein. In diesem Guide (Stand: Dezember 2020) wird eine kurze Einführung zu RIOT und anschließend zur Anwendung von Kryptographischen Verfahren gegeben.
 
-Installation von RIOT
-=====================
+# Installation von RIOT
 
 RIOT kann entweder direkt unter Linux installiert werden (VM oder physical machine) oder unter Windows mit Docker.
 
-Linux Installation
-------------------
+## Linux Installation
 
 ### Voraussetzungen
 
--   Git: Über Package-Manager Installieren\
-    (Bei Debian/Ubuntu: sudo apt-get install git)
+ - Git: Über Package-Manager Installieren (Bei Debian/Ubuntu: `sudo apt-get install git`)
+ - Build Essentials: Tools wie gcc und make (Bei Debian/Ubuntu: `sudo apt-get install build-essential`)
+ - Je nach Linux Distribution weitere Abhängigkeiten (siehe: <https://github.com/RIOT-OS/RIOT/wiki/Family:-native#dependencies>)
+ - Zum "On-Chip debuggen" falls RIOT auf entsprechender Hardware ausgeführt wird noch OpenOCD (siehe: <https://github.com/RIOT-OS/RIOT/wiki/OpenOCD>)
+ - GNU ARM Embedded Toolchain:
+ - `sudo apt-get install gcc-arm-none-eabi`
 
--   Build Essentials: Tools wie gcc und make\
-    (Bei Debian/Ubuntu: sudo apt-get install build-essential)
+### RIOT unter Linux installieren
 
--   Je nach Linux Distribution weitere Abhängigkeiten (siehe: <https://github.com/RIOT-OS/RIOT/wiki/Family:-native#dependencies>)
+ - Riot herunterladen: `git clone https://github.com/RIOT-OS/RIOT.git`
+ - Version auschecken: git checkout <version> (Stand Dezember 2020: `git checkout 2020.10`)
 
--   Zum "On-Chip debuggen" falls RIOT auf entsprechender Hardware ausgeführt wird noch OpenOCD (siehe: <https://github.com/RIOT-OS/RIOT/wiki/OpenOCD>)
+# RIOT-Programaufbau
 
--   GNU ARM Embedded Toolchain:
+Ein RIOT Programm benötigt 2 Komponenten: Eine Makefile und ein Programm.
 
--   sudo apt-get install gcc-arm-none-eabi
+## Makefile
 
-### RIOT Installation
-
--   Riot herunterladen: git clone <https://github.com/RIOT-OS/RIOT.git>
-
--   Version auschecken: git checkout <version>\
-    (Stand Dezember 2020: git checkout 2020.10)
-
-RIOT-Program Aufbau
-===================
-
-Einfachste Makefile
--------------------
-
-```
+```makefile
 # Name der Anwendung
 APPLICATION = commands-tutorial
 
@@ -61,10 +49,9 @@ include $(RIOTBASE)/Makefile.include
 
 Im Laufe des Tutorials werden wir die Makefile erweitern, aber dies ist alles was man für ein Minimales RIOT-Programm benötigt.
 
-Hello World Program
--------------------
+## Hello World Program
 
-```
+```c
 #include <stdio.h>
 
 int main(void)
@@ -74,7 +61,7 @@ int main(void)
 }
 ```
 
-Das Programm lässt sich mit make all term starten, als Ausgabe erhalten wir
+Das Programm lässt sich mit `make all term` starten, als Ausgabe erhalten wir
 
 ```
 RIOT native interrupts/signals initialized.
@@ -94,23 +81,24 @@ Sollte es beim ausführen von make all term  folgenden Fehler geben:
 ```
 /usr/include/stdio.h:27:10: fatal error: bits/libc-header-start.h: No such file or directory
 27 | #include <bits/libc-header-start.h>
-  	   |      	   ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
 ```
 
-Dann versucht der Compiler die System "stdio.h" Datei aus "/usr/include" zu verwenden. Wir wollen jedoch die "stdio.h" Datei von RIOT verwenden. In meinem Fall konnte dieser Fehler durch installieren des "gcc-multilib" Packets  behoben werden:
+Dann versucht der Compiler die System "stdio.h" Datei aus "/usr/include" zu verwenden.
+Wir wollen jedoch die "stdio.h" Datei von RIOT verwenden.
+In meinem Fall konnte dieser Fehler durch installieren des `gcc-multilib` Packets behoben werden:
+ - `sudo apt-get install gcc-multilib`
 
--   sudo apt-get install gcc-multilib
+# Tutorials
 
-Tutorials
-=========
+## RIOT Shell und Command Handler
 
-RIOT Shell und Command Handler
-------------------------------
-
-Um in der RIOT Shell Befehle auszuführen müssen im Projekt die Module "shell" und "shell_commands" hinzugefügt werden. Dazu wird die Makefile angepasst:
+Um RIOT interaktiv zu verwenden können wir die RIOT Shell verwenden.
+Um in der RIOT Shell Befehle auszuführen müssen im Projekt die Module `shell` und `shell_commands` hinzugefügt werden.
+Dazu wird die Makefile angepasst:
 
 
-```
+```diff
 # Name der Anwendung
 APPLICATION = commands-tutorial
 
@@ -118,9 +106,9 @@ APPLICATION = commands-tutorial
 # "native"
 BOARD ?= native
 
-# Hinzufügen der benötigten Module shell und shell_commands
-USEMODULE += shell
-USEMODULE += shell_commands
++  # Hinzufügen der benötigten Module shell und shell_commands
++  USEMODULE += shell
++  USEMODULE += shell_commands
 
 # Pfad zur RIOT installation, in diesem Fall befindet sich RIOT im
 # User Home verzeichnis
@@ -133,7 +121,7 @@ include $(RIOTBASE)/Makefile.include
 
 In der "shell.h" Datei wird die shell_command_t Struktur definiert, diese wird benötigt um Commands in der RIOT shell zu registrieren:
 
-```
+```c
 /**
  * @brief       	A single command in the list of the supported commands.
  * @details     	The list of commands is NULL terminated,
@@ -148,15 +136,14 @@ typedef struct shell_command_t {
 
 Ein shell_command_handler_t ist dabei ein Function-Pointer zu einer Funktion, die ein int zurückgibt und Zwei Argumente annimmt:
 
--   int argc Die Anzahl der Argumente
+ - `int argc` Die Anzahl der Argumente
+ - `char** argv` Die Liste der Argumente, `argv[0]` ist dabei der Name des aufgerufenen Befehls, `argv[argc]` ist `NULL`
 
--   char** argv Die Liste der Argumente, argv[0] ist dabei der Name des aufgerufenen Befehls, argv[argc] ist NULL
-
-Ein Shell Callback Handler gibt 0 zurück bei erfolgreicher bearbeitung des Befehls
+Ein Shell Callback Handler gibt bei erfolgreicher Bearbeitung `0` zurück.
 
 ### Beispiel eines Shell Callback Handler
 
-```
+```c
 int test_command_handler(int argc, char** argv) {
 	printf("Test command: ");
 
@@ -169,33 +156,33 @@ int test_command_handler(int argc, char** argv) {
 }
 ```
 
-Der obige command handler schreibt die Angegeben Argumente auf die Konsole, mit der "Test Command: " Präfix.
+Der obige Command Handler schreibt die Angegeben Argumente auf die Konsole, mit der "Test Command: " Präfix.
 
 ### Registrierung von Befehlen und Starten der Shell
 
-Um den obigen Befehl zu registrieren allozieren wir zunächst ein Array, welches 2 Commands enthält:
+Um einen Befehl zu Registrieren definieren wir zunächst ein Array, welches 2 Commands enthält:
 
--   Unseren Test command
+ - Unseren Test command
+ - Einen command, dessen member __*alle*__ auf `NULL` gesetzt sind, um die Liste zu terminieren. (Ähnlich wie das 0-Byte bei C-Strings)
 
--   Einen command, dessen member alle auf NULL gesetzt sind, um die Liste zu terminieren.
-
-```
+```c
 shell_command_t commands[] = {
 	{ "test", "RIOT Shell test command", test_command_handler },
 	{ NULL, NULL, NULL }
 };
 ```
 
-Nachdem wir dieses Array alloziert haben, müssen wir nur noch den Line Buffer allozieren und die Shell starten:
+Nachdem wir dieses Array definiert haben, müssen wir nur noch den Line Buffer erstellen und die Shell starten.
+Der Line-Buffer ist Speicher für den eingegeben Text auf der Shell:
 
-```
+```c
 char line_buf[SHELL_DEFAULT_BUFSIZE];
 shell_run(commands, line_buf, SHELL_DEFAULT_BUFSIZE);
 ```
 
-Hier die vollständige main.c Datei:
+Hier die vollständige `main.c` Datei:
 
-```
+```c
 #include "shell.h"
 #include "shell_commands.h"
 
@@ -226,7 +213,11 @@ int main(void)
 }
 ```
 
-Das Programm lässt sich über make all term starten, durch Eingabe von help kann man nun alle vorhandenen Befehle auflisten:
+Die `commands`-Array und der Line Buffer sind beide _Stack-allocated_,
+d.h. nachdem die `main` Funktion terminiert, wird der Speicherbereich gelöscht.
+Da aber `shell_run` eine Unendlichschleife aufruft, wird dies nicht vorkommen.
+
+Das Programm lässt sich über `make all term` builden und starten, durch Eingabe von `help` kann man nun alle vorhandenen Befehle auflisten:
 
 ```
 Command          	Description
@@ -237,38 +228,37 @@ version          	Prints current RIOT_VERSION
 pm               	interact with layered PM subsystem
 ```
 
-Nach der Eingabe des Befehls test test1 test2 test3 test4 sollte nun folgende Ausgabe zu sehen sein:
+Nach der Eingabe des Befehls `test 1 2 3 4` sollte nun folgende Ausgabe zu sehen sein:
 
 ```
-Test command: test test1 test2 test3 test4
+Test command: test 1 2 3 4
 ```
 
-Kryptographie
-=============
+## Kryptographie
 
-In den folgenden Tutorials wollen wir nun RIOT verwenden um Daten zu verschlüsseln, zuerst mit AES (im ECB sowie im CBC modus) und danach mithilfe der Relic Library.
+In den folgenden Tutorials wollen wir nun RIOT verwenden um Daten zu verschlüsseln,
+zuerst mit AES (im ECB sowie im CBC modus) und danach mithilfe der Relic Library.
 
-AES-ECB
--------
+### AES-ECB
 
 ### Anpassung der Makefile
 
-In dem hier besprochenen Programm werden wir die Module shell,  shell_commands,  crypto_aes  sowie od  verwenden
+In dem hier besprochenen Programm werden wir die Module `shell`, `shell_commands`, `crypto_aes` sowie `od` verwenden
 
-Fertige Makefile
+#### Fertige Makefile
 
-```
+```diff
 # Name der Anwendung
 APPLICATION = aes_ecb_example
 
 # Standardboard
 BOARD ?= native
 
-USEMODULE += shell   		 # RIOT Shell Modul
-USEMODULE += shell_commands	 # RIOT Shell Commands
-USEMODULE += crypto_aes   	 # Verschlüsselung mithilfe von AES
-USEMODULE += od			 # Object Dump
-USEMODULE += od_string   	 # Object Dump String representation
++  USEMODULE += shell_commands  # RIOT Shell Commands
++  USEMODULE += shell           # RIOT Shell Modul
++  USEMODULE += crypto_aes      # Verschlüsselung mithilfe von AES
++  USEMODULE += od              # Object Dump
++  USEMODULE += od_string       # Object Dump String representation
 
 # Pfad zur RIOT installation
 RIOTBASE ?= ${HOME}/RIOT
@@ -276,42 +266,43 @@ RIOTBASE ?= ${HOME}/RIOT
 include $(RIOTBASE)/Makefile.include
 ```
 
-### Die Header-Dateien "crpyto/ciphers.h" sowie "crypto/aes.h"
+### Die Header-Dateien `crpyto/ciphers.h` und `crypto/aes.h`
 
-In dem Programm werden wir die Header Dateien "crypto/ciphers.h" sowie "crypto/aes.h" verwenden.
+In dem Programm werden wir die Header Dateien `crypto/ciphers.h` sowie `crypto/aes.h` verwenden.
 
-Die ciphers.h Headerdatei beinhält essentielle Strukturen und Funktionen um mit RIOT Daten zu verschlüsseln. Die wichtigste Struktur dabei ist die cipher_t Struktur:
+Die `ciphers.h` Headerdatei enthält essentielle Strukturen und Funktionen um mit RIOT Daten zu verschlüsseln.
+Die wichtigste Struktur dabei ist die `cipher_t` Struktur:
 
-```
+```c
 /**
  * @brief basic struct for using block ciphers
  *    	contains the cipher interface and the context
  */
 typedef struct {
-      /**< BlockCipher-Interface for the Cipher-Algorithms */
-	const cipher_interface_t *interface;
-      /**< The encryption context (buffer) for the algorithm */
-	cipher_context_t context;
+	const cipher_interface_t *interface;    /**< BlockCipher-Interface for the Cipher-Algorithms */
+	cipher_context_t context;               /**< The encryption context (buffer) for the algorithm */
 } cipher_t;
 ```
 
-Wir werden die Member dieser Struktur nicht selber verwenden, aber "interface" ist ein pointer auf eine cipher_interface_t Struktur, welche Informationen über die Blockgröße, Maximale Schlüsselgröße und Function Pointer zu den Init/Encrypt sowie Decrypt Funktionen des Algorithmus enthält.
+Wir werden die Member dieser Struktur nicht selber verwenden, aber `interface` ist ein Pointer auf eine `cipher_interface_t` Struktur,
+welche Informationen über die Blockgröße, Maximale Schlüsselgröße und Function Pointer zu den Init/Encrypt sowie Decrypt Funktionen des Algorithmus enthält.
+`cipher_context_t` ist ein Buffer, der von den Algorithmen intern verwendet wird.
 
-Die cipher_context_t ist ein buffer, der von den Algorithmen intern verwendet wird.
+Wir werden aus der `ciphers.h` Headerdatei außerdem noch die Funktionen `cipher_init`, `cipher_encrypt` sowie `cipher_decrypt` verwenden:
 
-Wir werden aus der ciphers.h Headerdatei außerdem noch die Funktionen cipher_init,  cipher_encrypt  sowie cipher_decrypt verwenden:
+### cipher_init
 
-```
+```c
 /**
  * @brief Initialize new cipher state
  *
- * @param cipher     cipher struct to init (already allocated memory)
- * @param cipher_id  cipher algorithm id
- * @param key    	   encryption key to use
- * @param key_size   length of the encryption key
+ * @param cipher        cipher struct to init (already allocated memory)
+ * @param cipher_id     cipher algorithm id
+ * @param key           encryption key to use
+ * @param key_size      length of the encryption key
  *
- * @return  CIPHER_INIT_SUCCESS if the initialization was successful.
- * @return  CIPHER_ERR_BAD_CONTEXT_SIZE if CIPHER_MAX_CONTEXT_SIZE has  
+ * @return CIPHER_INIT_SUCCESS if the initialization was successful.
+ * @return CIPHER_ERR_BAD_CONTEXT_SIZE if CIPHER_MAX_CONTEXT_SIZE has  
  *          not been defined (which means that the cipher has not been 
  *          included in the build)
  * @return  The command may return CIPHER_ERR_INVALID_KEY_SIZE if the
@@ -319,63 +310,96 @@ Wir werden aus der ciphers.h Headerdatei außerdem noch die Funktionen cipher_in
  */
 int cipher_init(cipher_t *cipher, cipher_id_t cipher_id,
                const uint8_t *key, uint8_t key_size);
+```
+
+Die cipher_init Funktion nimmt einen Pointer zu einer `cipher_t` Struktur, die Struktur darf uninitialisierter Speicher sein,
+die Funktion initialisiert diesen Speicher dann mit dem richtigen Kontext und Buffer.
+Das zweite Argument ist ein Pointer zu einer `cipher_interface_t` Struktur.
+Außerdem nimmt die Funktion den Schlüssel zur Verschlüsselung an, sowie dessen größe.
+
+Die Funktion gibt bei erfolgreicher Initialisiation `CIPHER_INIT_SUCCESS` zurück,
+ansonsten einer der Fehlercodes `CIPHER_ERR_BAD_CONTEXT_SIZE` oder `CIPHER_ERR_INVALID_KEY_SIZE`
+
+Beispiel:
+
+```c
+uint8_t key[AES_KEY_SIZE] = { /* ... */ };
+cipher_t cipher;
+
+int err = cipher_init(&cipher, CIPHER_AES_128, key, AES_KEY_SIZE);
+
+if (err != CIPHER_INIT_SUCCESS)
+{
+    printf("Cipher Init failed: %d\n", err);
+    exit(err);
+}
+```
+
+Der Code definiert einen Schlüssel der Größe `AES_KEY_SIZE` (16).
+Erstellt danach eine uninitialisierte `cipher_t` Struktur auf dem Stack.
+Ruft die `cipher_init` Funktion auf mit dem Pointer zu der `cipher_t` Struktur, 
+mit der cipher id `CIPHER_AES_128`, dem Pointer zum Schlüssel und der Größe des Schlüssels.
+
+Der Code speichert dann das Ergebnis des `cipher_init` aufrufs in einer Variablen `err` ab und
+überprüft, ob es beim Initialisieren der `cipher_t` Struktur zu Fehlern kam.
+
+### cipher_encrypt
+
+```c
 /**
  * @brief Encrypt data of BLOCK_SIZE length
  * *
  *
- * @param cipher 	Already initialized cipher struct
- * @param input  	pointer to input data to encrypt
- * @param output 	pointer to allocated memory for encrypted data.
- *                It has to be of size BLOCK_SIZE
+ * @param cipher    Already initialized cipher struct
+ * @param input     pointer to input data to encrypt
+ * @param output    pointer to allocated memory for encrypted data.
+ *                  It has to be of size BLOCK_SIZE
  *
- * @return       	The result of the encrypt operation of the underlying
- *               	cipher, which is always 1 in case of success
- * @return       	A negative value for an error
+ * @return          The result of the encrypt operation of the underlying
+ *                  cipher, which is always 1 in case of success
+ * @return          A negative value for an error
  */
 int cipher_encrypt(const cipher_t *cipher, const uint8_t *input,
                	uint8_t *output);
-
-
-/**
- * @brief Decrypt data of BLOCK_SIZE length
- * *
- *
- * @param cipher 	Already initialized cipher struct
- * @param input  	pointer to input data (of size BLOCKS_SIZE) to decrypt
- * @param output 	pointer to allocated memory for decrypted data.
- *                It has to be of size BLOCK_SIZE
- *
- * @return       	The result of the decrypt operation of the underlying
- *               	cipher, which is always 1 in case of success
- * @return       	A negative value for an error
- */
-int cipher_decrypt(const cipher_t *cipher, const uint8_t *input,
-               	uint8_t *output);
 ```
 
-### cipher_init
-
-Die cipher_init Funktion nimmt einen Pointer zu einer cipher_t Struktur, die Struktur darf uninitialisierter Speicher sein, die Funktion initialisiert diesen Speicher dann mit dem richtigen Kontext und Buffer. Das zweite Argument ist ein Pointer zu einer cipher_interface_t Struktur. Außerdem nimmt die Funktion den Schlüssel zur verschlüsselung an, sowie dessen größe.
-
-Die Funktion gibt bei erfolgreicher Initialisiation CIPHER_INIT_SUCCESS zurück, ansonsten einer der Fehlercodes CIPHER_ERR_BAD_CONTEXT_SIZE oder CIPHER_ERR_INVALID_KEY_SIZE
-
-Beispiel:
-
-### cipher_encrypt
-
-Die cipher_encrypt Funktion verschlüsselt einen Datenblock der im cipher_interface_t gespeicherten Block size und nimmt als Argument einen Pointer zu einer initialisierten cipher_t Struktur, einen Pointer zu dem Klartextbuffer sowie einen Pointer zum Ciphertextbuffer. Die Klartext und Ciphertextbuffer sollten einen Block des verwendeten Algorithmus enthalten (Bei AES also mindestens 16 Bytes).
+Die cipher_encrypt Funktion verschlüsselt einen Datenblock der im `cipher_interface_t` gespeicherten Block size und
+nimmt als Argument einen Pointer zu einer initialisierten `cipher_t` Struktur,
+einen Pointer zu dem Klartextbuffer sowie einen Pointer zum Ciphertextbuffer (Also wohin die Ausgabe geschrieben werden soll).
+Die Klartext und Ciphertextbuffer sollten einen Block des verwendeten Algorithmus enthalten (Bei AES also mindestens 16 Bytes).
 
 Die Funktion gibt bei erfolgreichem Verschlüsseln 1 zurück
 
 ### cipher_decrypt
 
-Die cipher_decrypt Funktion entschlüsselt einen Datenblock der für den Algorithmus geltenden Block size und nimmt als Argument eine Pointer zu einer initialisierten cipher_t Struktur einen Pointer zu dem Ciphertext, der entschlüsselt werden soll sowie einen Pointer zu einem Buffer, in dem der entschlüsselte Klartext geschrieben werden soll.
+```c
+/**
+ * @brief Decrypt data of BLOCK_SIZE length
+ * *
+ *
+ * @param cipher    Already initialized cipher struct
+ * @param input     pointer to input data (of size BLOCKS_SIZE) to decrypt
+ * @param output    pointer to allocated memory for decrypted data.
+ *                  It has to be of size BLOCK_SIZE
+ *
+ * @return          The result of the decrypt operation of the underlying
+ *                  cipher, which is always 1 in case of success
+ * @return          A negative value for an error
+ */
+int cipher_decrypt(const cipher_t *cipher, const uint8_t *input,
+               	uint8_t *output);
+```
+
+Die `cipher_decrypt` Funktion entschlüsselt einen Datenblock der für den Algorithmus geltenden Block size und
+nimmt als Argument einen Pointer zu einer initialisierten `cipher_t` Struktur, einen Pointer zu dem Ciphertext,
+der entschlüsselt werden soll sowie einen Pointer zu einem Buffer,
+in dem der entschlüsselte Klartext geschrieben werden soll.
 
 Die Funktion gibt bei erfolgreichem Entschlüsseln 1 zurück
 
 ### Programm zur Verschlüsselung einer Kurzen (bis zu 15 Zeichen) Nachricht
 
-```
+```c
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -442,12 +466,9 @@ int main(void)
 Als Ausgabe erhalten wir:
 
 ```
-Klartext:      54 65 73 74 6E 61 63 68 72 69 63 68 74 00 00 00  
-Testnachricht...
-Ciphertext:    BC 4E DC 18 20 A9 EB 57 59 0F 76 C0 DC 9D 5A B9
-.N.. ..WY.v...Z.
-Entschlüsselt: 54 65 73 74 6E 61 63 68 72 69 63 68 74 00 00 00  
-Testnachricht...
+Klartext:      54 65 73 74 6E 61 63 68 72 69 63 68 74 00 00 00  Testnachricht...
+Ciphertext:    BC 4E DC 18 20 A9 EB 57 59 0F 76 C0 DC 9D 5A B9  .N.. ..WY.v...Z.
+Entschlüsselt: 54 65 73 74 6E 61 63 68 72 69 63 68 74 00 00 00  Testnachricht...
 ```
 
 Relic

@@ -18,4 +18,4 @@ RIOT kann entweder direkt unter Linux installiert werden (VM oder physical machi
  - Riot herunterladen: `git clone https://github.com/RIOT-OS/RIOT.git`
  - Version auschecken: git checkout <version> (Stand Dezember 2020: `git checkout 2020.10`)
 
-[Teil 2: Programaufbau](https://github.com/flori-schwa/IT-Sec2/blob/master/Tutorials/02_Programaufbau.md) -->
+[Teil 2: Programaufbau](02_Programaufbau.md) -->

@@ -141,4 +141,4 @@ Nach der Eingabe des Befehls `test 1 2 3 4` sollte nun folgende Ausgabe zu sehen
 Test command: test 1 2 3 4
 ```
 
-<-- [Teil 2: Programaufbau](https://github.com/flori-schwa/IT-Sec2/blob/master/Tutorials/02_Programaufbau.md) -- [Teil 4: AES ECB](https://github.com/flori-schwa/IT-Sec2/blob/master/Tutorials/Crypto/04_AES_ECB.md) -->
+<-- [Teil 2: Programaufbau](02_Programaufbau.md) -- [Teil 4: AES ECB](Crypto/04_AES_ECB.md) -->

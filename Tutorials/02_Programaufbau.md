@@ -65,4 +65,4 @@ Wir wollen jedoch die "stdio.h" Datei von RIOT verwenden.
 In meinem Fall konnte dieser Fehler durch installieren des `gcc-multilib` Packets behoben werden:
  - `sudo apt-get install gcc-multilib`
 
-<-- [Teil 1: Installation](https://github.com/flori-schwa/IT-Sec2/blob/master/Tutorials/01_Installation.md) -- [Teil 3: Shell und Commands](https://github.com/flori-schwa/IT-Sec2/blob/master/Tutorials/03_ShellCommands.md) -->
+<-- [Teil 1: Installation](01_Installation.md) -- [Teil 3: Shell und Commands](03_ShellCommands.md) -->

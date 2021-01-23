@@ -230,4 +230,4 @@ Ciphertext:    BC 4E DC 18 20 A9 EB 57 59 0F 76 C0 DC 9D 5A B9  .N.. ..WY.v...Z.
 Entschlüsselt: 54 65 73 74 6E 61 63 68 72 69 63 68 74 00 00 00  Testnachricht...
 ```
 
-<-- [Teil 3: Shell und Commands](https://github.com/flori-schwa/IT-Sec2/blob/master/Tutorials/03_ShellCommands.md) -- [....] -->
+<-- [Teil 3: Shell und Commands](../03_ShellCommands.md) -- [....] -->

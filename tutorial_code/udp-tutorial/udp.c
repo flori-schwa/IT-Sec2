@@ -89,7 +89,7 @@ void *_udp_server_thread(void *args)
         // Wenn der Initialisierungsvektor noch nicht empfangen wurde
         if (!server_state.has_iv)
         {
-            RECV_AND_CHECK(server_state.iv, 16); // Lese 16 Bytes von der UDP Verbindung und speichere diesen im IV-Buffer ab
+            RECV_AND_CHECK(server_state.iv, 16); // Lese 16 Bytes von der UDP Verbindung und speichere diese im IV-Buffer ab
             server_state.has_iv = true;          // Setze das IV-Empfangen Flag auf true
 
             printf("Received IV: \n"); // Konsolenausgabe der IV

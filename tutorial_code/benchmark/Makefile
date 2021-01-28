@@ -15,12 +15,14 @@ DEVELHELP ?= 1
 USEMODULE += shell
 USEMODULE += shell_commands
 USEMODULE += crypto_aes
+USEMODULE += cipher_modes
 
 # USEMODULE += crypto_aes_precalculated
 # USEMODULE += crypto_aes_unroll
 
 USEMODULE += random
 USEMODULE += xtimer
+USEMODULE += printf_float
 
 # Change this to 0 show compiler invocation lines by default:
 QUIET ?= 1

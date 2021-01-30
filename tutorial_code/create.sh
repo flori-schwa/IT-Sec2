@@ -8,7 +8,7 @@ if [ -n $1 ]; then
     
     mkdir $1
     cp -r .template/* $1/
-    sed -i -e "s/{{appname}}/$1/g" $1/Makefile
+    sudo sed -i -e "s/{{appname}}/$1/g" $1/Makefile
     echo "Created Application $1"
 else
     echo "Syntax: $0 <name>"

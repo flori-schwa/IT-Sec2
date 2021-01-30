@@ -12,9 +12,12 @@ RIOTBASE ?= ${CURDIR}/../.base
 # development process:
 DEVELHELP ?= 1
 
-export RELIC_CONFIG_FLAGS=-DARCH=NONE -DQUIET=off -DWORD=32 -DFP_PRIME=255 -DWITH="BN;MD;DV;FP;EP;CP;BC;EC" -DSEED=ZERO
+export RELIC_CONFIG_FLAGS=-DARCH=NONE -DALLOC=DYNAMIC -DQUIET=off -DWORD=32 -DFP_PRIME=255 -DWITH="BN;MD;DV;FP;EP;CP;BC;EC" -DSEED=RIOTRND
 
 USEPKG += relic
+
+USEMODULE += od
+USEMODULE += od_string
 
 # Change this to 0 show compiler invocation lines by default:
 QUIET ?= 1

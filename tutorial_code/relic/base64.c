@@ -2,12 +2,13 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 static void base64_encode_block(void *data, char *output, size_t remaining)
 {
     static const char *base64_table = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
-    const char *raw = (char *)data;
+    const uint8_t *raw = (uint8_t *)data;
 
     const bool do_s3 = remaining >= 2;
     const bool do_s4 = remaining >= 3;

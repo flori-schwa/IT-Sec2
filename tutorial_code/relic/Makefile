@@ -18,6 +18,8 @@ USEPKG += relic
 
 USEMODULE += od
 USEMODULE += od_string
+USEMODULE += shell
+USEMODULE += shell_commands
 
 # Change this to 0 show compiler invocation lines by default:
 QUIET ?= 1

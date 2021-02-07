@@ -1,6 +1,7 @@
 # Installation von RIOT
 
 RIOT kann entweder direkt unter Linux installiert werden (VM oder physical machine) oder unter Windows mit Docker.
+Außerdem kann RIOT unter WSL (Windows Subsystem for Linux) installiert werden.
 
 ## Linux Installation
 

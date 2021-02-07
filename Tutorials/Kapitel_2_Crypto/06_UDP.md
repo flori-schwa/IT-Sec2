@@ -493,11 +493,7 @@ In dieser Funktion wird der Thread erstellt, welcher dann wiederum `_udp_server_
 #include <stdio.h>
 #include <string.h>
 
-#include "msg.h"
 #include "shell.h"
-
-#define MAIN_QUEUE_SIZE     (8)
-static msg_t _main_msg_queue[MAIN_QUEUE_SIZE];
 
 extern int udp_send(int argc, char **argv);
 extern int udp_server(int argc, char **argv);
@@ -510,8 +506,6 @@ static const shell_command_t shell_commands[] = {
 
 int main(void)
 {
-    msg_init_queue(_main_msg_queue, MAIN_QUEUE_SIZE);
-
     char line_buf[SHELL_DEFAULT_BUFSIZE];
     shell_run(shell_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
 
@@ -522,8 +516,6 @@ int main(void)
 Die Hauptklasse `main.c` greift mit dem Keyword `extern` auf die in `udp.c` definierten Funktionen zu.
 
 Für das Senden und Empfangen/Starten des UDP Servers werden zwei Custom Commands erstellt und in `shell_commands` gespeichert.
-
-Da hier asynchrone IPC (Interprozesskommunikation) benötigt wird, müssen wir in der `main` Methode eine Message Queue initialisieren. Das Header `msg.h` bietet hierfür die Funktion `msg_init_queue()`. Da als Länge der Queue eine Zweierpotenz erforderlich ist, wurde der Wert 2³ = 8 Nachrichten verwendet.
 
 ## Ausführen des Programms
 

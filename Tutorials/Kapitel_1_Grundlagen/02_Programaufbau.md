@@ -50,19 +50,4 @@ main(): This is RIOT! (Version: 2020.10)
 Hello World!
 ```
 
-### Fehlerbehebung
-
-Sollte es beim ausführen von make all term  folgenden Fehler geben:
-
-```
-/usr/include/stdio.h:27:10: fatal error: bits/libc-header-start.h: No such file or directory
-27 | #include <bits/libc-header-start.h>
-   |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
-```
-
-Dann versucht der Compiler die System "stdio.h" Datei aus "/usr/include" zu verwenden.
-Wir wollen jedoch die "stdio.h" Datei von RIOT verwenden.
-In meinem Fall konnte dieser Fehler durch installieren des `gcc-multilib` Packets behoben werden:
- - `sudo apt-get install gcc-multilib`
-
 <-- [Teil 1: Installation](01_Installation.md) -- [Teil 3: Shell und Commands](03_ShellCommands.md) -->

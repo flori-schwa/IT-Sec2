@@ -13,6 +13,9 @@ RIOT kann entweder direkt unter Linux installiert werden (VM oder physical machi
  - GNU ARM Embedded Toolchain:
  - `sudo apt-get install gcc-arm-none-eabi`
 
+Auf Ubuntu noch folgende Packages Installieren:
+ - `sudo apt-get install gcc-multilib g++-multilib`
+
 ### RIOT unter Linux installieren
 
  - Riot herunterladen: `git clone https://github.com/RIOT-OS/RIOT.git`

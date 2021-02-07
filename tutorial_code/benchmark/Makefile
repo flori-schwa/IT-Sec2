@@ -12,15 +12,19 @@ RIOTBASE ?= ${CURDIR}/../.base
 # development process:
 DEVELHELP ?= 1
 
+export RELIC_CONFIG_FLAGS=-DARCH=NONE -DALLOC=DYNAMIC -DQUIET=off -DWORD=32 -DFP_PRIME=255 -DWITH="BN;MD;DV;FP;EP;CP;BC;EC" -DSEED=RIOTRND
+
+USEPKG += relic
+
 USEMODULE += shell
 USEMODULE += shell_commands
 USEMODULE += crypto_aes
 USEMODULE += cipher_modes
+USEMODULE += random
 
 # USEMODULE += crypto_aes_precalculated
 # USEMODULE += crypto_aes_unroll
 
-USEMODULE += random
 USEMODULE += xtimer
 USEMODULE += printf_float
 

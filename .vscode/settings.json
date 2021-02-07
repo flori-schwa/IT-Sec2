@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "bench_aes.h": "c",
+        "bench.h": "c",
+        "stdint.h": "c",
+        "xtimer.h": "c",
+        "random.h": "c",
+        "bench_rsa.h": "c",
+        "board.h": "c",
+        "relic.h": "c"
+    }
+}

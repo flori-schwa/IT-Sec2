@@ -10,6 +10,16 @@ extern "C" {
 #include <cstdio>
 #include "der.hpp"
 
+// Copied from relic_cp_rsa.c
+
+#if CP_RSAPD == PKCS1
+#define RSA_PAD_LEN		(11)
+#elif CP_RSAPD == PKCS2
+#define RSA_PAD_LEN		(2 * MD_LEN + 2)
+#else
+#define RSA_PAD_LEN		(2)
+#endif
+
 const uint8_t rsa_oid_sequence[15] = {
     0x30,                                                 // Sequence Tag
     0x0D,                                                 // Sequence Tag Length
@@ -114,20 +124,20 @@ void der_write_bn_t(DerBuffer *buffer, bn_t bn)
 
     if (leading_zero)
     {
-        buffer->append_raw(0);
+        buffer->append_byte_raw(0);
     }
 
     for (int byte = first_dig_required_bytes - 1; byte >= 0; byte--)
     {
 
-        buffer->append_raw(NTH_BYTE(bn->dp[bn->used - 1], byte));
+        buffer->append_byte_raw(NTH_BYTE(bn->dp[bn->used - 1], byte));
     }
 
     for (int i = bn->used - 2; i >= 0; i--)
     {
         for (int byte = (WORD / 8) - 1; byte >= 0; byte--)
         {
-            buffer->append_raw(NTH_BYTE(bn->dp[i], byte));
+            buffer->append_byte_raw(NTH_BYTE(bn->dp[i], byte));
         }
     }
 }
@@ -162,7 +172,7 @@ void print_pub_key(rsa_t pub)
 
     // Bit String Tag
     der.write_tag_header(DER_BIT_STRING, pub_key_sequence_length + 1);
-    der.append_raw(0); // Unused Bits field
+    der.append_byte_raw(0); // Unused Bits field
 
     // Sequence Tag containing both pubkey integers n and e
     der.write_tag_header(CONSTRUCTED(DER_SEQUENCE), tag_n_len + tag_e_len);
@@ -175,7 +185,7 @@ void print_pub_key(rsa_t pub)
     size_t b64_str_len = BASE64_REQUIRED_LENGTH(der.used);
     char *base64 = (char *)malloc(b64_str_len * sizeof(char));
 
-    base64_encode(der.buf, der.used, base64);
+    base64_encode(der.buffer, der.used, base64);
 
     pem_print("PUBLIC KEY", base64, b64_str_len);
 
@@ -225,7 +235,7 @@ void print_priv_key(rsa_t pub, rsa_t priv)
     size_t b64_str_len = BASE64_REQUIRED_LENGTH(der.used);
     char *base64 = (char *)malloc(b64_str_len * sizeof(char));
 
-    base64_encode(der.buf, der.used, base64);
+    base64_encode(der.buffer, der.used, base64);
 
     pem_print("RSA PRIVATE KEY", base64, b64_str_len);
 
@@ -233,6 +243,10 @@ void print_priv_key(rsa_t pub, rsa_t priv)
 }
 
 static rsa_t pub, priv;
+
+static inline int min(int a, int b) {
+    return a < b ? a : b;
+}
 
 static int rsa_encrypt(int argc, char **argv)
 {
@@ -242,20 +256,32 @@ static int rsa_encrypt(int argc, char **argv)
         return 1;
     }
 
-    uint8_t out[RELIC_BN_BITS / 8 + 1];
+    int data_len = strlen(argv[1]);
 
-    int out_len = RELIC_BN_BITS / 8 + 1;
-    int result = cp_rsa_enc(out, &out_len, (uint8_t *)argv[1], strlen(argv[1]), pub);
+    uint8_t tmp[RELIC_BN_BITS / 8 + 1];
+    int consumed = 0;
 
-    printf("cp_rsa_enc return code is %d\n", result);
+    while (consumed < data_len) {
+        int to_encrypt = min(128 - RSA_PAD_LEN, data_len - consumed);
+        int out_len = RELIC_BN_BITS / 8 + 1;
 
-    size_t b64_str_len = BASE64_REQUIRED_LENGTH(out_len);
-    char *base64 = (char *)malloc(b64_str_len * sizeof(char));
-    base64_encode(out, out_len, base64);
+        int result = cp_rsa_enc(tmp, &out_len, (uint8_t*) (argv[1] + consumed), to_encrypt, pub);
 
-    pem_print("RSA ENCRYPTED TEXT", base64, b64_str_len);
+        if (result != STS_OK) {
+            printf("cp_rsa_enc returned %d\n", result);
+            return result;
+        }
 
-    free(base64);
+        size_t b64_str_len = BASE64_REQUIRED_LENGTH(out_len);
+        char *base64 = (char *)malloc(b64_str_len * sizeof(char));
+        base64_encode(tmp, out_len, base64);
+
+        pem_print("RSA ENCRYPTED TEXT", base64, b64_str_len);
+
+        free(base64);
+
+        consumed += to_encrypt;
+    }
 
     return 0;
 }
@@ -281,8 +307,8 @@ int main(void)
         {"rsa", "RSA encrypt text", rsa_encrypt},
         {NULL, NULL, NULL}};
 
-    char shell_buf[SHELL_DEFAULT_BUFSIZE];
-    shell_run(commands, shell_buf, SHELL_DEFAULT_BUFSIZE);
+    char shell_buf[256];
+    shell_run(commands, shell_buf, 256);
 
     rsa_free(pub);
     rsa_free(priv);

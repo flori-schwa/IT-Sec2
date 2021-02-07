@@ -20,57 +20,12 @@ int uint32_t_msbyte(uint32_t x) {
 
 /* ============================ IMPLEMENTATION ============================ */
 
-DerBuffer::DerBuffer()
-{
-    this->buf = nullptr;
-    this->allocated = 0;
-    this->used = 0;
-}
-
-DerBuffer::~DerBuffer()
-{
-    this->cleanup();
-}
-
-void DerBuffer::cleanup()
-{
-    free(this->buf);
-}
-
-void DerBuffer::ensure_capacity(uint32_t requiredLen)
-{
-    uint32_t offset = this->used;
-    size_t required_total_len = (size_t) (offset + requiredLen);
-
-    if (!this->buf) {
-        this->buf = (uint8_t*) malloc(required_total_len);
-        this->allocated = required_total_len;
-    }
-    else {
-        if (this->allocated < required_total_len) {
-            this->buf = (uint8_t*) realloc(this->buf, required_total_len);
-            this->allocated = required_total_len;
-        }
-    }
-}
-
-void DerBuffer::write(const void *source, uint32_t content_length)
-{
-    this->ensure_capacity(content_length);
-    memcpy(this->buf + this->used, source, (size_t) content_length);
-    this->used += content_length;
-}
-
-void DerBuffer::append_raw(uint8_t x) {
-    this->buf[this->used++] = x;
-}
-
 void DerBuffer::write_null_tag()
 {
     this->ensure_capacity(DER_BUF_NULL_TAG_SIZE);
 
-    this->append_raw(DER_NULL);
-    this->append_raw(0);
+    this->append_byte_raw(DER_NULL);
+    this->append_byte_raw(0);
 }
 
 void DerBuffer::write_tag_header(uint8_t type, uint32_t content_length)
@@ -78,15 +33,15 @@ void DerBuffer::write_tag_header(uint8_t type, uint32_t content_length)
     size_t required_len = header_size(content_length);
     this->ensure_capacity(required_len);
 
-    this->append_raw(type);
+    this->append_byte_raw(type);
 
     if (content_length > 127) {
         int lf_int_bytes = uint32_t_msbyte(content_length) + 1;
 
-        this->append_raw(0x80 | lf_int_bytes);
+        this->append_byte_raw(0x80 | lf_int_bytes);
         this->uint32_t_write_big_endian(content_length, lf_int_bytes);
     } else {
-        this->append_raw((uint8_t) content_length);
+        this->append_byte_raw((uint8_t) content_length);
     }
 }
 
@@ -99,10 +54,10 @@ void DerBuffer::write_uint8(uint8_t x)
     this->ensure_capacity(value_len);
 
     if (x & 0x80) {
-        this->append_raw(0);
+        this->append_byte_raw(0);
     }
 
-    this->append_raw(x);
+    this->append_byte_raw(x);
 }
 
 void DerBuffer::uint32_t_write_big_endian(uint32_t x, int max) {
@@ -113,7 +68,7 @@ void DerBuffer::uint32_t_write_big_endian(uint32_t x, int max) {
     this->ensure_capacity(max);
 
     for (int byte = max - 1; byte >= 0; byte--) {
-        this->append_raw(NTH_BYTE(x, byte));
+        this->append_byte_raw(NTH_BYTE(x, byte));
     }
 }
 

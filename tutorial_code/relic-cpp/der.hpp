@@ -1,6 +1,8 @@
 #ifndef DER_HPP
 #define DER_HPP
 
+#include "dynamic_buffer.hpp"
+
 #include <stdint.h>
 
 #define DER_INT ((uint8_t) 0x02)
@@ -17,23 +19,8 @@
 
 int uint32_t_msbyte(uint32_t x);
 
-class DerBuffer {
+class DerBuffer : public DynamicBuffer {
 public:
-    uint8_t* buf;
-    size_t used;
-    size_t allocated;
-
-    DerBuffer();
-
-    ~DerBuffer();
-
-    void cleanup();
-
-    void ensure_capacity(uint32_t requiredLen);
-
-    void write(const void* source, uint32_t content_length);
-
-    void append_raw(uint8_t x);
 
     void write_null_tag();
 

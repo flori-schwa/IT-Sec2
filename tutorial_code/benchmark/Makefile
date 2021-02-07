@@ -21,12 +21,8 @@ USEMODULE += shell_commands
 USEMODULE += crypto_aes
 USEMODULE += cipher_modes
 USEMODULE += random
-
-# USEMODULE += crypto_aes_precalculated
-# USEMODULE += crypto_aes_unroll
-
-USEMODULE += xtimer
-USEMODULE += printf_float
+USEMODULE += xtimer             # zeitbezogene Funktionen wie Timer
+USEMODULE += printf_float       # Float Konsolenausgaben
 
 # Change this to 0 show compiler invocation lines by default:
 QUIET ?= 1

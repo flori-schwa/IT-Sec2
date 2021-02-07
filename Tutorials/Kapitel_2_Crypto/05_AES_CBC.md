@@ -11,7 +11,7 @@ Das Bild mit AES-ECB verschlüsselt sieht nachher so aus:
 
 ![AES-ECB](../../resources/Tux_ecb.jpg)
 
-In diesem Tutorial werden wir und anschauen, wir man in RIOT Daten mit AES-CBC verschlüsselt.
+In diesem Tutorial werden wir und anschauen, wie man in RIOT Daten mit AES-CBC verschlüsselt.
 AES-CBC nimmt neben dem Klartext und dem Schlüssel noch einen sogenannten Initialisierungsvektor (IV) als dritten Parameter an.
 Bevor der erste Block verschlüsselt wird, wird der Block mit dem IV XORed, für alle anderen Blöcke wird der letzte Ciphertext Block als IV verwendet.
 
@@ -210,7 +210,7 @@ int main(void)
 }
 ```
 
-###Ausgabe
+## Ausgabe
 
 ```
 IV: 00000000  13  E9  4A  77  4D  D2  F9  59  C7  21  D0  F5  24  25  1F  10  ..JwM..Y.!..$%..
@@ -248,7 +248,7 @@ Decrypted Ciphertext:
 
 **Der IV und Ciphertext wird bei jedem mal ausführen anders aussehen**
 
-## Anderes Beispielprogramm
+# Anderes Beispielprogramm
 
 [Hier](../../tutorial_code/03_example_aes_cbc_cmd) ist ein Beispielprogramm, welches einen Command beinhält, dass eine im Command angegebene Nachricht mit AES-CBC verschlüsselt:
 

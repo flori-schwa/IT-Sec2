@@ -101,6 +101,10 @@ Zurückgegeben wird durch die Funktion die PID des Threads vom Typ `kernel_pid_t
 
 Die komplette Erstellung des UDP Servers werden wir in einer separaten Funktion auslagern. Den Pointer zu dieser Funktion geben wir dann beim Aufruf von `thread_create` als Argument für `task_func` mit.
 
+# Programm zum Empfangen von mit AES-CBC verschlüsselten Daten
+
+[Hier](../../tutorial_code/udp-tutorial) ist das C-Programm, welches wir nun genauer betrachten werden.
+
 ## `udp.c`
 
 In dieser Klassendatei wurden die maßgeblichen Funktionen zum Starten eines UDP Servers sowie das Senden/Empfangen von AES-verschlüsselten Nachrichten ausgelagert.
@@ -232,7 +236,7 @@ Nach und nach sollen in einer Endlosschleife soll die noch leere Struktur `serve
         else
         {
             RECV_AND_CHECK(server_state.encrypted_data_buf, server_state.encrypted_data_len); // Empfange die verschlüsselte Nachricht
-            uint8_t *decrypted = malloc(sizeof(server_state.encrypted_data_len));             // Alloziere den Buffer für die entschlüsselte Nachricht
+            uint8_t *decrypted = malloc(server_state.encrypted_data_len);                     // Alloziere den Buffer für die entschlüsselte Nachricht
 
             printf("Received encrypted Data: \n");
             od_hex_dump_ext(server_state.encrypted_data_buf, server_state.encrypted_data_len, AES_BLOCK_SIZE, 0);

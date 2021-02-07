@@ -66,7 +66,7 @@ int cp_rsa_enc(uint8_t *out, int *out_len, uint8_t *in, int in_len, rsa_t pub);
 ```
 
 Die Funktion `cp_rsa_enc` wird verwendet, um Daten mit RSA zu verschlüsseln.
-Die Funktion nimmt 6 Parameter an: Den Ausgabebuffer, einen Pointer zur Länge des Ausgabebuffers,
+Die Funktion nimmt 5 Parameter an: Den Ausgabebuffer, einen Pointer zur Länge des Ausgabebuffers,
 den Eingabebuffer, die Größe des Eingabebuffers und den öffentlichen Schlüssel.
 
 Als Rückgabewert liefert die Funktion bei erfolgreichen Verschlüsseln `STS_OK`. Bei Fehlern gibt die Funktion `STS_ERR` zurück.
@@ -94,7 +94,7 @@ int main(void)
     rsa_null(pub);
     rsa_null(priv);
 
-    // Initialisiere die Pointer, rsa_new ruft calloc auf!
+    // Initialisiere die Pointer. WICHTIG!: rsa_new ruft calloc auf!
     rsa_new(pub);
     rsa_new(priv);
 

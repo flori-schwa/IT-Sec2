@@ -80,7 +80,7 @@ shell_command_t commands[] = {
 ```
 
 Nachdem wir dieses Array definiert haben, müssen wir nur noch den Line Buffer erstellen und die Shell starten.
-Der Line-Buffer ist Speicher für den eingegeben Text auf der Shell:
+Der Line-Buffer ist Speicher für den eingegebenen Text auf der Shell:
 
 ```c
 char line_buf[SHELL_DEFAULT_BUFSIZE];
@@ -120,7 +120,7 @@ int main(void)
 }
 ```
 
-Die `commands`-Array und der Line Buffer sind beide _Stack-allocated_,
+Das `commands`-Array und der Line Buffer sind beide _Stack-allocated_,
 d.h. nachdem die `main` Funktion terminiert, wird der Speicherbereich gelöscht.
 Da aber `shell_run` eine Unendlichschleife aufruft, wird dies nicht vorkommen.
 

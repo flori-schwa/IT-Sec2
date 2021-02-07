@@ -128,7 +128,7 @@ void *_udp_server_thread(void *args)
         else
         {
             RECV_AND_CHECK(server_state.encrypted_data_buf, server_state.encrypted_data_len); // Empfange die verschlüsselte Nachricht
-            uint8_t *decrypted = malloc(sizeof(server_state.encrypted_data_len));             // Alloziere den Buffer für die entschlüsselte Nachricht
+            uint8_t *decrypted = malloc(server_state.encrypted_data_len);                     // Alloziere den Buffer für die entschlüsselte Nachricht
 
             printf("Received encrypted Data: \n");
             od_hex_dump_ext(server_state.encrypted_data_buf, server_state.encrypted_data_len, AES_BLOCK_SIZE, 0);

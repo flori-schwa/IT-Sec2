@@ -4,6 +4,7 @@
 
 #include "net/sock/udp.h"
 #include "net/ipv6/addr.h"
+#include "net/gnrc/netif.h"
 #include "thread.h"
 
 #include "crypto/modes/cbc.h"
@@ -206,7 +207,7 @@ int udp_send(int argc, char **argv)
     {
         // Wenn es sich um eine Link-Local IPv6 Addresse handelt, nehme das Erste Interface
         // gnrc_netif_iter mit NULL gibt das erste Element der Iteration zurück
-        remote.netif = ((uint16_t)gnrc_netif_iter(NULL))->pid;
+        remote.netif =  (uint16_t) (gnrc_netif_iter(NULL)->pid);
     }
 
     // Parse den Port

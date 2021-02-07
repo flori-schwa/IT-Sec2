@@ -10,6 +10,9 @@
         "bench.h": "c",
         "ciphers.h": "c",
         "cbc.h": "c",
-        "od.h": "c"
+        "od.h": "c",
+        "cstddef": "cpp",
+        "udp.h": "c",
+        "netif.h": "c"
     }
 }

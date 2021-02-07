@@ -171,4 +171,8 @@ In RIOT:
 In Linux:
  * Befehl ausführen `./decrypt_test.sh <Base64 von Ausgabe>`
 
-<-- [Teil 6: RIOT UDP Networking](06_UDP.md) -- [Teil 8: Benchmarking](../Kapitel_3_Ergebnisse/08_Benchmarking.md) -->
+[Zurück zum Index](../../README.md)
+
+[Zurück zu Teil 6: Exkurs UDP](06_UDP.md)
+
+[Weiter zu Kapitel 3: Benchmarking und Ergebnisse](../Kapitel_3_Ergebnisse/08_Benchmarking.md)

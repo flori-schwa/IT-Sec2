@@ -22,4 +22,6 @@ Auf Ubuntu noch folgende Packages Installieren:
  - Riot herunterladen: `git clone https://github.com/RIOT-OS/RIOT.git`
  - Version auschecken: git checkout <version> (Stand Dezember 2020: `git checkout 2020.10`)
 
-[Teil 2: Programaufbau](02_Programaufbau.md) -->
+[Zurück zum Index](../../README.md)
+
+[Weiter zu Teil 2: Programmaufbau](02_Programaufbau.md)

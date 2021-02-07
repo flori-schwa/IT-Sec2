@@ -258,4 +258,8 @@ Um eine Nachricht mit Leerzeichen zu verschlüsseln einfach den gesamten Text in
 
 z.B: `encrypt "Meine Nachricht"`
 
-<-- [Teil 4: AES-ECB](04_AES_ECB.md) -- [Teil 6: RIOT UDP Networking](06_UDP.md) -->
+[Zurück zum Index](../../README.md)
+
+[Zurück zu Teil 4: AES im Electronic Codebook (ECB) Modus](04_AES_ECB.md)
+
+[Weiter zu Teil 6: Exkurs UDP](06_UDP.md)

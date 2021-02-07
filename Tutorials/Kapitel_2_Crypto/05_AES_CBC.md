@@ -75,7 +75,7 @@ int cipher_encrypt_cbc(const cipher_t *cipher, uint8_t iv[16], const uint8_t *in
 
 Die `cipher_encrypt_cbc` ist ähnlich wie die `cipher_encrypt` Funktion aus dem vorherigen Kapitel.
 Es gibt ein paar Unterschiede:
- - Es wird der IV als Parameter mitgegeben
+ - Es wird der Initialisierungsvektor (IV) als Parameter mitgegeben
  - Der Klartext darf nun größer als ein AES Block (16 Bytes) sein. Wenn die Eingabe größer als 16 Bytes ist, wird ge-chained.
  - Die Länge des Klartext muss mitgegeben werden und muss ein vielfaches der AES Blockgröße (16) sein.
  - Der Ausgabepointer muss groß genug sein um den gesamten verschlüsselten Text zu speichern.

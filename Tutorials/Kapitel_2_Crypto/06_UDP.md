@@ -333,7 +333,7 @@ Die Initialisierung der `cipher_t` Struktur sowie des Remote Endpunktes verläuf
     {
         // Wenn es sich um eine Link-Local IPv6 Addresse handelt, nehme das Erste Interface
         // gnrc_netif_iter mit NULL gibt das erste Element der Iteration zurück
-        remote.netif = ((uint16_t)gnrc_netif_iter(NULL))->pid;
+        remote.netif =  (uint16_t) (gnrc_netif_iter(NULL)->pid);
     }
 
     // Parse den Port

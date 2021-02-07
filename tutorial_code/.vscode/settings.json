@@ -7,6 +7,9 @@
         "atmega_regs_common.h": "c",
         "tinymt32.h": "c",
         "bench_aes.h": "c",
-        "bench.h": "c"
+        "bench.h": "c",
+        "ciphers.h": "c",
+        "cbc.h": "c",
+        "od.h": "c"
     }
 }

@@ -74,7 +74,7 @@ int cipher_init(cipher_t *cipher, cipher_id_t cipher_id,
 Die cipher_init Funktion nimmt einen Pointer zu einer `cipher_t` Struktur, die Struktur darf uninitialisierter Speicher sein,
 die Funktion initialisiert diesen Speicher dann mit dem richtigen Kontext und Buffer.
 Das zweite Argument ist ein Pointer zu einer `cipher_interface_t` Struktur.
-Außerdem nimmt die Funktion den Schlüssel zur Verschlüsselung an, sowie dessen größe.
+Außerdem nimmt die Funktion den Schlüssel zur Verschlüsselung an, sowie dessen Größe.
 
 Die Funktion gibt bei erfolgreicher Initialisiation `CIPHER_INIT_SUCCESS` zurück,
 ansonsten einer der Fehlercodes `CIPHER_ERR_BAD_CONTEXT_SIZE` oder `CIPHER_ERR_INVALID_KEY_SIZE`

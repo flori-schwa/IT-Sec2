@@ -13,6 +13,6 @@ USEMODULE += cipher_modes # Um AES-CBC zu verwenden
 USEMODULE += random       # Um einen zufälligen IV zu generieren  
 
 # Pfad zur RIOT installation
-RIOTBASE ?= ${HOME}/RIOT
+RIOTBASE ?= ${CURDIR}/../.base
 
 include $(RIOTBASE)/Makefile.include

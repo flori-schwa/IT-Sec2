@@ -4,7 +4,7 @@
 
 #include <stdbool.h>
 
-static uint8_t key[AES_KEY_SIZE] = {
+static uint8_t key[AES_KEY_SIZE_128] = {
     0x64, 0x52, 0x67, 0x55,
     0x6B, 0x58, 0x70, 0x32,
     0x73, 0x35, 0x75, 0x38,
@@ -23,7 +23,7 @@ bool aes_ecb_bench_iteration(void *args)
 {
     struct aes_ecb_bench_params_t *params = args;
 
-    int err;
+    int err = 0;
     int block = 0;
 
     for (size_t offset = 0; block < params->n_blocks; offset = AES_BLOCK_SIZE * ++block)
@@ -80,7 +80,7 @@ AES-ECB Benchmark Summary:
     params.input = malloc(params.total_buf_len);
     params.output = malloc(params.total_buf_len);
 
-    int err = cipher_init(&params.cipher, CIPHER_AES_128, key, AES_KEY_SIZE);
+    int err = cipher_init(&params.cipher, CIPHER_AES_128, key, AES_KEY_SIZE_128);
 
     if (err != CIPHER_INIT_SUCCESS)
     {

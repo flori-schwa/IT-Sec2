@@ -5,7 +5,7 @@
 
 #include <stdbool.h>
 
-static uint8_t key[AES_KEY_SIZE] = {
+static uint8_t key[AES_KEY_SIZE_128] = {
     0x64, 0x52, 0x67, 0x55,
     0x6B, 0x58, 0x70, 0x32,
     0x73, 0x35, 0x75, 0x38,
@@ -80,7 +80,7 @@ AES-CBC Benchmark Summary:
     params.input = malloc(params.total_buf_len);
     params.output = malloc(params.total_buf_len);
 
-    int err = cipher_init(&params.cipher, CIPHER_AES_128, key, AES_KEY_SIZE);
+    int err = cipher_init(&params.cipher, CIPHER_AES_128, key, AES_KEY_SIZE_128);
 
     if (err != CIPHER_INIT_SUCCESS)
     {

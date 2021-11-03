@@ -30,7 +30,7 @@ void *_udp_server_thread(void *args)
     // ################### Initialisierung der cipher_t Struktur ###################
     cipher_t cipher;
 
-    int err = cipher_init(&cipher, CIPHER_AES_128, key, sizeof(key));
+    int err = cipher_init(&cipher, CIPHER_AES_128, key, AES_KEY_SIZE_128);
 
     if (err != CIPHER_INIT_SUCCESS)
     {
@@ -178,7 +178,7 @@ int udp_send(int argc, char **argv)
     // ################### Initialisierung der cipher_t Struktur ###################
     if (!init_cipher)
     {
-        int err = cipher_init(&cipher, CIPHER_AES_128, key, sizeof(key));
+        int err = cipher_init(&cipher, CIPHER_AES_128, key, AES_KEY_SIZE_128);
 
         if (err != CIPHER_INIT_SUCCESS)
         {

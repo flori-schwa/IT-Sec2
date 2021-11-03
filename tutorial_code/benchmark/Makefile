@@ -18,7 +18,7 @@ USEPKG += relic
 
 USEMODULE += shell
 USEMODULE += shell_commands
-USEMODULE += crypto_aes
+USEMODULE += crypto_aes_128
 USEMODULE += cipher_modes
 USEMODULE += random
 USEMODULE += xtimer             # zeitbezogene Funktionen wie Timer

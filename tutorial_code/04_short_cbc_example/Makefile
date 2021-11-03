@@ -6,7 +6,7 @@ BOARD ?= native
 
 USEMODULE += shell_commands  # RIOT Shell Commands
 USEMODULE += shell           # RIOT Shell Modul
-USEMODULE += crypto_aes      # Verschlüsselung mithilfe von AES
+USEMODULE += crypto_aes_128      # Verschlüsselung mithilfe von AES
 USEMODULE += od              # Object Dump
 USEMODULE += od_string       # Object Dump String representation
 USEMODULE += cipher_modes # Um AES-CBC zu verwenden

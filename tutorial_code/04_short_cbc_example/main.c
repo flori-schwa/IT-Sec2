@@ -27,7 +27,7 @@ int main(void)
     cipher_t cipher;
     int err;
 
-    if ((err = cipher_init(&cipher, CIPHER_AES_128, key, AES_KEY_SIZE)) != CIPHER_INIT_SUCCESS) {
+    if ((err = cipher_init(&cipher, CIPHER_AES_128, key, AES_KEY_SIZE_128)) != CIPHER_INIT_SUCCESS) {
         printf("Failed to init cipher: %d\n", err);
         return err;
     }

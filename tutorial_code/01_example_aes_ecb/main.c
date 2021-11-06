@@ -96,7 +96,7 @@ int main(void)
         0x73, 0x35, 0x75, 0x38,
         0x78, 0x2F, 0x41, 0x3F};
 
-    int err = cipher_init(&cipher, CIPHER_AES_128, key, AES_KEY_SIZE);
+    int err = cipher_init(&cipher, CIPHER_AES_128, key, AES_KEY_SIZE_128);
 
     if (err != CIPHER_INIT_SUCCESS)
     {

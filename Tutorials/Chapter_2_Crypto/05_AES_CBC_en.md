@@ -1,7 +1,7 @@
 # AES-CBC
 
-The AES-ECB mode is proven to be insecure, it is recommended to use another block mode.
-The problem with AES-ECB is that with the same key and the same input, the same ciphertext is always calculated.
+The AES-ECB mode is proven to be insecure so it is recommended to use another block mode.
+The problem with AES-ECB is that each key-input-pair always calculate the same ciphertext.
 
 Example:
 
@@ -12,7 +12,7 @@ After AES-ECB encryption the image looks like this:
 ![AES-ECB](../../resources/Tux_ecb.jpg)
 
 In this tutorial we will look at how to encrypt data in RIOT using AES-CBC.
-AES-CBC takes a so-called initialization vector (IV) as a third parameter besides the plaintext and the key.
+AES-CBC expects an Initialization Vector (IV) as a third parameter to be passed alongside the plaintext and the key.
 Before the first block is encrypted, the block with the IV is XOR'd, for all other blocks the last ciphertext block is used as IV.
 
 The same picture, now encrypted with AES-CBC, looks like this:
@@ -75,13 +75,13 @@ int cipher_encrypt_cbc(const cipher_t *cipher, uint8_t iv[16], const uint8_t *in
 
 The `cipher_encrypt_cbc` is similar to the `cipher_encrypt` function from the previous chapter.
 There are a few differences:
- - The initialization vector (IV) is given as a parameter.
- - The plaintext may now be larger than an AES block (16 bytes). If the input is larger than 16 bytes, it is chained.
- - The length of the plaintext must be given and must be a multiple of the AES block size (16).
+ - The initialization vector (IV) is additionally passed as a parameter.
+ - The plaintext may now be longer than an AES block (16 bytes). If the input is longer than 16 bytes, it will be chained.
+ - The length of the plaintext must also be provided and has to be a multiple of the AES block size (16).
  - The output pointer must be large enough to store the entire encrypted text.
    The size of this buffer can be easily calculated by the given formula `data_len + BLOCK_SIZE - data_len % BLOCK_SIZE`.
  - The return value on successful encryption is no longer `1`,
-   but the amount of bytes that were not processed from the input.
+   but rather the number of unprocessed input bytes.
 
 ### Function `cipher_decrypt_cbc`
 
@@ -109,7 +109,7 @@ The `cipher_decrypt_cbc` function behaves in the same way as the `cipher_decrypt
 The only difference to `cipher_encrypt_cbc` is that the input is not encrypted but decrypted.
 The return value is the number of decrypted bytes.
 
-# Program to enc
+# Program to encrypt messages of any size
 
 ```c
 #include <stdio.h>
@@ -131,7 +131,7 @@ static const uint8_t key[] = {
 int main(void)
 {
     /*
-     * The message contains 6 times all hexadecimal digits lined up in a row.
+     * The message contains all hexadecimal digits concatenated 6 times.
      * This makes it easy to see in the ciphertext that the same plaintext block encrypted with CBC gives different results.
      */
     const char* message = "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF";

@@ -233,6 +233,4 @@ Decrypted:	   54 65 73 74 6E 61 63 68 72 69 63 68 74 00 00 00  Testnachricht...
 
 [Back to index](../../README.md)
 
-[Back to Chapter 1: Basics, Part 3: Shell Commands](../Kapitel_1_Grundlagen/03_ShellCommands_de.md)
-
 [Continue to Part 5: AES in Cipher Block Chaining (CBC) mode](05_AES_CBC_en.md)

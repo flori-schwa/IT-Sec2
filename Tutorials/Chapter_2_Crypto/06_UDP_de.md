@@ -631,8 +631,8 @@ Decrypted Data:
 00000010  74  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  t...............
 ```
 
-[Zurück zum Index](../../README.md)
+[Zurück zum Index](../../README_de.md)
 
-[Zurück zu Teil 5: AES im Cipher Block Chaining (CBC) Modus](04_AES_ECB.md)
+[Zurück zu Teil 5: AES im Cipher Block Chaining (CBC) Modus](04_AES_ECB_de.md)
 
-[Weiter zu Teil 7: RSA Verschlüsselung mithilfe des RELIC-Tookits](07_Relic.md)
+[Weiter zu Teil 7: RSA Verschlüsselung mithilfe des RELIC-Tookits](07_Relic_de.md)

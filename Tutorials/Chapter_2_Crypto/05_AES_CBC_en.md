@@ -261,5 +261,3 @@ Example: `encrypt "My message"`
 [Back to index](../../README.md)
 
 [Back to Part 4: AES in Electronic Codebook (ECB) mode](04_AES_ECB_en.md)
-
-[Continue to Part 6: Excursion UDP](06_UDP_de.md)

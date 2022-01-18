@@ -340,6 +340,6 @@ Input Size: 100 Bytes
  Max usec: 569
 ```
 
-[Zurück zum Index](../../README.md)
+[Zurück zum Index](../../README_de.md)
 
-[Zurück zu Teil 7: RSA Verschlüsselung mithilfe des RELIC-Tookits](../Kapitel_2_Crypto/07_Relic.md)
+[Zurück zu Teil 7: RSA Verschlüsselung mithilfe des RELIC-Tookits](../Chapter_2_Crypto/07_Relic_de.md)

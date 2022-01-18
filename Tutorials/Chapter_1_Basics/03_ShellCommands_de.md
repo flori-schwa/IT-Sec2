@@ -141,8 +141,8 @@ Nach der Eingabe des Befehls `test 1 2 3 4` sollte nun folgende Ausgabe zu sehen
 Test command: test 1 2 3 4
 ```
 
-[Zurück zum Index](../../README.md)
+[Zurück zum Index](../../README_de.md)
 
-[Zurück zu Teil 2 Programmaufbau](02_Programaufbau.md)
+[Zurück zu Teil 2 Programmaufbau](02_ProgramStructure_de.md)
 
-[Weiter zu Kapitel 2: Krypto, AES-ECB](../Kapitel_2_Crypto/04_AES_ECB.md)
+[Weiter zu Kapitel 2: Krypto, AES-ECB](../Chapter_2_Crypto/04_AES_ECB_de.md)

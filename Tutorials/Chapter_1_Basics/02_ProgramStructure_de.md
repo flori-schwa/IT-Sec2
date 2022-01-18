@@ -50,8 +50,8 @@ main(): This is RIOT! (Version: 2020.10)
 Hello World!
 ```
 
-[Zurück zum Index](../../README.md)
+[Zurück zum Index](../../README_de.md)
 
-[Zurück zu Teil 1: Installation](01_Installation.md)
+[Zurück zu Teil 1: Installation](01_Installation_de.md)
 
-[Weiter zu Teil 3: Shell und Commands](03_ShellCommands.md)
+[Weiter zu Teil 3: Shell und Commands](03_ShellCommands_de.md)

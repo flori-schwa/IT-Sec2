@@ -9,16 +9,16 @@ The tutorials are divided into three chapters:
 
 Chapter 1 provides basic knowledge about RIOT and how to write and run executable programs with RIOT.
 
-## :germany: [Part 1: Installation](Tutorials/Chapter_1_Basics/01_Installation_de.md)
+## :de: [Part 1: Installation](Tutorials/Chapter_1_Basics/01_Installation_de.md)
 
 Part 1 describes the RIOT installation process as well as the minimum requirements.
 We focus on mainly using RIOT under Linux.
 
-## :germany: [Part 2: Program structure](Tutorials/Chapter_1_Basics/02_ProgramStructure_de.md)
+## :de: [Part 2: Program structure](Tutorials/Chapter_1_Basics/02_ProgramStructure_de.md)
 
 Part 2 describes the basic structure of a minimal RIOT program, including the structure of the Makefile and how to run it under Linux.
 
-## :germany: [Part 3: Shell und Commands](Tutorials/Chapter_1_Basics/03_ShellCommands_de.md)
+## :de: [Part 3: Shell und Commands](Tutorials/Chapter_1_Basics/03_ShellCommands_de.md)
 
 Part 3 provides a first insight on how to write interactive RIOT programs using the shell. Here we will write a simple command handler and start the shell.
 
@@ -36,16 +36,16 @@ Here we will demonstrate the basics of using AES in ECB mode under RIOT.
 
 The previous program will be extended such that data can be encrypted in Cipher Block Chaining mode.
 
-## :germany: [Excursion: Transferring AES-CBC encrypted data over the network](Tutorials/Chapter_2_Crypto/06_UDP_de.md)
+## :de: [Excursion: Transferring AES-CBC encrypted data over the network](Tutorials/Chapter_2_Crypto/06_UDP_de.md)
 
 No new crypto algorithm will be introduced here, but rather we will use the known AES-CBC algorithm to exchange secret messages between client and server.
 
-## :germany: [Part 6: RSA encryption using RELIC tookit](Tutorials/Chapter_2_Crypto/07_Relic_de.md)
+## :de: [Part 6: RSA encryption using RELIC tookit](Tutorials/Chapter_2_Crypto/07_Relic_de.md)
 
 In this part we show how to encrypt data using the RSA implementation of the RELIC toolkit.
 
 ---
 
-# :germany: [Chapter 3: benchmarking and results](Tutorials/Chapter_3_Results/08_Benchmarking_de.md)
+# :de: [Chapter 3: benchmarking and results](Tutorials/Chapter_3_Results/08_Benchmarking_de.md)
 
 In this short chapter we present the results of simple benchmark algorithms. 

@@ -1,55 +1,51 @@
-# RIOT OS Kryptotutorials
+# RIOT OS Crypto tutorials
 
-In diesen Tutorials wird erklärt wie man verschiedene Kryptoalgorithmen im ioT-Betriebssystem RIOT verwenden kann.
-Diese Tutorials sind eine Projektabgabe für das Fach "IT-Sicherheit 2" an der [Hochschule für Technik Stuttgart](https://www.hft-stuttgart.de/).
+The following tutorials explain how to use different crypto algorithms on the IoT operating system RIOT.
+This is a project assignment for the course "IT Security 2" at the [Stuttgart University of Applied Sciences ("Hochschule für Technik Stuttgart")](https://www.hft-stuttgart.de/).
 
-Die Tutorials sind in 3 Kapitel gegliedert:
+The tutorials are divided into three chapters:
 
-# [Kapitel 1: Grundlagen](Tutorials/Kapitel_1_Grundlagen)
+# [Chapter 1: Basics](Tutorials/Chapter_1_Basics)
 
-Kapitel 1 vermittelt Grundwissen zu RIOT und wie man mit RIOT lauffähige Programme schreiben und ausführen kann.
+Chapter 1 provides basic knowledge about RIOT and how to write and run executable programs with RIOT.
 
-## [Teil 1: Installation](Tutorials/Kapitel_1_Grundlagen/01_Installation.md)
+## :germany: [Part 1: Installation](Tutorials/Chapter_1_Basics/01_Installation_de.md)
 
-Teil 1 beschreibt den RIOT Installationsprozess sowie welche Vorraussetzungen benötigt werden.
-Es wird sich auf die verwendung von RIOT unter Linux fokusiert.
+Part 1 describes the RIOT installation process as well as the minimum requirements.
+We focus on mainly using RIOT under Linux.
 
-## [Teil 2: Programmaufbau](Tutorials/Kapitel_1_Grundlagen/02_Programaufbau.md)
+## :germany: [Part 2: Program structure](Tutorials/Chapter_1_Basics/02_ProgramStructure_de.md)
 
-Teil 2 beschreibt den Aufbau des minimalen RIOT Programmes,
-u.a. wie die Makefile eines RIOT-Programmes auszusehen hat und wie man dieses dann unter Linux laufen lassen kann.
+Part 2 describes the basic structure of a minimal RIOT program, including the structure of the Makefile and how to run it under Linux.
 
-## [Teil 3: Shell und Commands](Tutorials/Kapitel_1_Grundlagen/03_ShellCommands.md)
+## :germany: [Part 3: Shell und Commands](Tutorials/Chapter_1_Basics/03_ShellCommands_de.md)
 
-Teil 3 liefert erste Einblicke, wie man unter Verwendung der Shell Interaktive Programme mit RIOT schreiben kann.
-Es wird ein einfacher Command Handler geschrieben und die Shell gestartet.
+Part 3 provides a first insight on how to write interactive RIOT programs using the shell. Here we will write a simple command handler and start the shell.
 
 ---
 
-# [Kapitel 2: Crypto](Tutorials/Kapitel_2_Crypto)
+# [Chapter 2: Crypto](Tutorials/Chapter_2_Crypto)
 
-Kapitel 2 vermittelt das notwendige Wissen um in RIOT Programme zu schreiben, die Kryptographische Algorithmen nutzen.
-Es werden die Algorithmen AES-ECB, AES-CBC sowie RSA behandelt.
+Chapter 2 provides the necessary knowledge how to write RIOT programs that use cryptographic algorithms. We will cover the algorithms  AES-ECB, AES-CBC and RSA.
 
-## [Teil 4: AES im Electronic Codebook (ECB) Modus](Tutorials/Kapitel_2_Crypto/04_AES_ECB.md)
+## :gb: [Part 4: AES in Electronic Codebook (ECB) mode](Tutorials/Chapter_2_Crypto/04_AES_ECB_en.md)
 
-In diesem Teil werden die Basics der Verwendung von AES im ECB-Modus unter RIOT präsentiert.
+Here we will demonstrate the basics of using AES in ECB mode under RIOT.
 
-## [Teil 5: AES im Cipher Block Chaining (CBC) Modus](Tutorials/Kapitel_2_Crypto/05_AES_CBC.md)
+## :gb: [Part 5: AES in Cipher Block Chaining (CBC) mode](Tutorials/Chapter_2_Crypto/05_AES_CBC_en.md)
 
-In diesem Teil wird das Programm erweitert, sodass Daten im Cipher Block Chaining Modus verschlüsselt werden können.
+The previous program will be extended such that data can be encrypted in Cipher Block Chaining mode.
 
-## [Exkurs: Übertragen von AES-CBC verschlüsselten Daten über das Netzwerk](Tutorials/Kapitel_2_Crypto/06_UDP.md)
+## :germany: [Excursion: Transferring AES-CBC encrypted data over the network](Tutorials/Chapter_2_Crypto/06_UDP_de.md)
 
-In diesem Teil wird kein neuer Crypto-Algorithmus angesprochen,
-es wird der nun bekannte AES-CBC Algorithmus angewendet um mithilfe eines Client und Servers geheime Nachrichten auszutauschen.
+No new crypto algorithm will be introduced here, but rather we will use the known AES-CBC algorithm to exchange secret messages between client and server.
 
-## [Teil 6: RSA Verschlüsselung mithilfe des RELIC-Tookits](Tutorials/Kapitel_2_Crypto/07_Relic.md)
+## :germany: [Part 6: RSA encryption using RELIC tookit](Tutorials/Chapter_2_Crypto/07_Relic_de.md)
 
-In diesem Teil wird gezeigt, wie man mithilfe des RELIC-Toolkit's Daten mithilfe von RSA verschlüsseln kann.
+In this part we show how to encrypt data using the RSA implementation of the RELIC toolkit.
 
 ---
 
-# [Kapitel 3: Benchmarking und Ergebnisse](Tutorials/Kapitel_3_Ergebnisse/08_Benchmarking.md)
+# :germany: [Chapter 3: benchmarking and results](Tutorials/Chapter_3_Results/08_Benchmarking_de.md)
 
-In diesem kurzen Kapitel werden Ergebnisse von simplen Benchmark Algorithmen präsentiert
+In this short chapter we present the results of simple benchmark algorithms. 

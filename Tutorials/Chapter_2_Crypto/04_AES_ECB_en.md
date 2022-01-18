@@ -31,7 +31,7 @@ include $(RIOTBASE)/Makefile.include
 In the program we will use the header files `crypto/ciphers.h` and `crypto/aes.h`.
 
 The `ciphers.h` header file contains essential structures and functions to encrypt data with RIOT.
-The most important structure is the `cipher_t` structure:
+The most important struct is `cipher_t`:
 
 ```c
 /**
@@ -44,13 +44,13 @@ typedef struct {
 } cipher_t;
 ```
 
-We will not use the members of this structure per se, but `interface` is a pointer to a `cipher_interface_t` structure,
+We will not use the members of this struct per se, however `interface` is a pointer to a `cipher_interface_t` struct,
 which contains information about the block size, maximum key size and function pointers to the init/encrypt and decrypt functions of the algorithm.
 `cipher_context_t` is a buffer used internally by the algorithms.
 
 We will also use the functions `cipher_init`, `cipher_encrypt` and `cipher_decrypt` from the `ciphers.h` header file:
 
-## cipher_init
+## Function `cipher_init`
 
 ```c
 /**
@@ -72,10 +72,10 @@ int cipher_init(cipher_t *cipher, cipher_id_t cipher_id,
                const uint8_t *key, uint8_t key_size);
 ```
 
-The cipher_init function takes a pointer to a `cipher_t` structure, the structure may be uninitialized memory,
+The `cipher_init` function expects a pointer to a `cipher_t` struct which may be uninitialized memory,
 the function then initializes this memory with the correct context and buffer.
-The second argument is a pointer to a `cipher_interface_t` structure.
-In addition, the function takes the key for encryption, as well as its size.
+The second argument is a pointer to a `cipher_interface_t` struct.
+In addition, the function expects the encryption key, as well as its size.
 
 The function returns `CIPHER_INIT_SUCCESS` if the initialization was successful,
 otherwise one of the error codes `CIPHER_ERR_BAD_CONTEXT_SIZE` or `CIPHER_ERR_INVALID_KEY_SIZE`.
@@ -96,14 +96,14 @@ if (err != CIPHER_INIT_SUCCESS)
 ```
 
 The code defines a key of size `AES_KEY_SIZE` (16).
-Then creates an uninitialized `cipher_t` structure on the stack.
-Calls the `cipher_init` function with the pointer to the `cipher_t` structure, 
-with the cipher id `CIPHER_AES_128`, the pointer to the key and the size of the key.
+Then creates an uninitialized `cipher_t` struct on the stack.
+Calls the `cipher_init` function with the pointer to the `cipher_t` struct,
+the cipher id `CIPHER_AES_128`, key pointer and key size being passed.
 
 The code then stores the result of the `cipher_init` call in a variable `err` and
-checks if there were any errors when initializing the `cipher_t` structure.
+checks if there were any errors when initializing the `cipher_t` struct.
 
-## cipher_encrypt
+## Function `cipher_encrypt`
 
 ```c
 /**
@@ -123,14 +123,13 @@ int cipher_encrypt(const cipher_t *cipher, const uint8_t *input,
                	uint8_t *output);
 ```
 
-The cipher_encrypt function encrypts a data block of the block size stored in `cipher_interface_t` and takes as argument a pointer to an initialized `cipher_t` structure.
-takes as argument a pointer to an initialized `cipher_t` structure,
-a pointer to the plaintext buffer and a pointer to the ciphertext buffer (where the output should be written to).
-The plaintext and ciphertext buffers should contain a block of the used algorithm (for AES at least 16 bytes).
+The cipher_encrypt function encrypts a data block of the block size stored in `cipher_interface_t` and accepts as arguments three pointers, one to the initialized `cipher_t` struct,
+another to the plaintext buffer and finally one to the output buffer (where the encrypted plaintext should be written to).
+The plaintext and ciphertext buffers should consist of a block of the used algorithm (for AES at least 16 bytes).
 
 The function returns 1 if the encryption was successful.
 
-## cipher_decrypt
+## Function `cipher_decrypt`
 
 ```c
 /**
@@ -150,12 +149,10 @@ int cipher_decrypt(const cipher_t *cipher, const uint8_t *input,
                	uint8_t *output);
 ```
 
-The `cipher_decrypt` function decrypts a data block of the block size applicable to the algorithm and
-takes as argument a pointer to an initialized `cipher_t` structure, a pointer to the ciphertext,
-to be decrypted and a pointer to a buffer,
-into which the decrypted plaintext is to be written.
+The `cipher_decrypt` function decrypts a data block of the block size applicable to the algorithm and, 
+analogous to its "sister function", also accepts three pointers as arguments: one for an initialized `cipher_t` struct, another for the ciphertext input and finally one for the output buffer (where the decrypted plaintext should be written to).
 
-Analogous to its "sister function", the value 1 is returned on successful decryption.
+Once again, the function returns 1 if on successful decryption.
 
 ## Program to encrypt a short (max. 15 characters) message
 

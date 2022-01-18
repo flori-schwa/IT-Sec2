@@ -216,7 +216,7 @@ int main(void)
     	     exit(err);
 	}
 
-	printf("Decrypted ciphertext: \t");
+	printf("Decrypted: \t");
 	od_hex_dump_ext(input, AES_BLOCK_SIZE, 0, 0);
 
 	exit(0);
